@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 
-import {Card, Table, ButtonGroup, Button} from 'react-bootstrap';
+import {Card, Table, InputGroup, FormControl, ButtonGroup, Button} from 'react-bootstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faList, faEdit, faTrash, faAddressCard, faPlus} from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faAddressCard, faPlus, faTrain, faStepBackward, faFastBackward, faStepForward, faFastForward} from '@fortawesome/free-solid-svg-icons';
 import {Link} from 'react-router-dom';
 import MyToast from './MyToast';
 import axios from 'axios';
@@ -12,7 +12,9 @@ export default class FindTrains extends Component {
 	constructor(props) {
         super(props);
         this.state = {
-            trains : []
+            trains : [],
+            currentPage : 1,
+            trainsPerPage : 5
         };
     }
     
@@ -27,6 +29,44 @@ export default class FindTrains extends Component {
                 this.setState({trains: data});
             });
     }
+
+    changePage = event => {
+        this.setState({
+            [event.target.name]: parseInt(event.target.value)
+        });
+    };
+
+    firstPage = () => {
+        if(this.state.currentPage > 1) {
+            this.setState({
+                currentPage: 1
+            });
+        }
+    };
+
+    prevPage = () => {
+        if(this.state.currentPage > 1) {
+            this.setState({
+                currentPage: this.state.currentPage - 1
+            });
+        }
+    };
+
+    lastPage = () => {
+        if(this.state.currentPage < Math.ceil(this.state.trains.length / this.state.trainsPerPage)) {
+            this.setState({
+                currentPage: Math.ceil(this.state.trains.length / this.state.trainsPerPage)
+            });
+        }
+    };
+
+    nextPage = () => {
+        if(this.state.currentPage < Math.ceil(this.state.trains.length / this.state.trainsPerPage)) {
+            this.setState({
+                currentPage: this.state.currentPage + 1
+            });
+        }
+    };
 
     deleteTrain = (tid) => {
         axios.delete("http://localhost:8080/api/trains/"+tid)
@@ -44,13 +84,26 @@ export default class FindTrains extends Component {
     };
     
 	render() {
+        const {trains, currentPage, trainsPerPage} = this.state;
+        const lastIndex = currentPage * trainsPerPage;
+        const firstIndex = lastIndex - trainsPerPage;
+        const currentTrains = trains.slice(firstIndex, lastIndex);
+        const totalPages = trains.length / trainsPerPage;
+
+        const pageNumCss = {
+            width: "45px",
+            border: "1px solid #17A2B8",
+            color: "#17A2B8",
+            textAlign: "center",
+            fontWeight: "bold"
+        };
 		return (
             <div>
                 <div style={{"display":this.state.show ? "block" : "none"}}>
                 <MyToast show = {this.state.show} message = {"Train Deleted Successfully."} type = {"danger"}/>
                 </div>
             <Card className={"border border-dark bg-dark text-white"}>
-                <Card.Header><FontAwesomeIcon icon={faList} /> Train List</Card.Header>
+                <Card.Header><FontAwesomeIcon icon={faTrain} /> Train List</Card.Header>
                 <Card.Body>
                     <Table bordered hover striped variant="dark">
                         <thead>
@@ -69,7 +122,7 @@ export default class FindTrains extends Component {
                                 <tr align="center">
                                   <td colSpan="6">No Trains Available.</td>
                                 </tr> :
-                                this.state.trains.map((train) => (
+                                currentTrains.map((train) => (
                                 <tr key={train.tid}>
                                     <td>{train.tname}</td>
                                     <td>{train.source}</td>
@@ -90,6 +143,37 @@ export default class FindTrains extends Component {
                           </tbody>
                     </Table>
                 </Card.Body>
+                <Card.Footer>
+                <div style={{"float":"left"}}>
+                            Showing Page {currentPage} of {totalPages}
+                        </div>
+                        <div style={{"float":"right"}}>
+                            <InputGroup size="sm">
+                                <InputGroup.Prepend>
+                                    <Button type="button" variant="outline-info" disabled={currentPage === 1 ? true : false}
+                                        onClick={this.firstPage}>
+                                        <FontAwesomeIcon icon={faFastBackward} /> First
+                                    </Button>
+                                    <Button type="button" variant="outline-info" disabled={currentPage === 1 ? true : false}
+                                        onClick={this.prevPage}>
+                                        <FontAwesomeIcon icon={faStepBackward} /> Prev
+                                    </Button>
+                                </InputGroup.Prepend>
+                                <FormControl style={pageNumCss} className={"bg-dark"} name="currentPage" value={currentPage}
+                                    onChange={this.changePage}/>
+                                <InputGroup.Append>
+                                    <Button type="button" variant="outline-info" disabled={currentPage === totalPages ? true : false}
+                                        onClick={this.nextPage}>
+                                        <FontAwesomeIcon icon={faStepForward} /> Next
+                                    </Button>
+                                    <Button type="button" variant="outline-info" disabled={currentPage === totalPages ? true : false}
+                                        onClick={this.lastPage}>
+                                        <FontAwesomeIcon icon={faFastForward} /> Last
+                                    </Button>
+                                </InputGroup.Append>
+                            </InputGroup>
+                        </div>
+                    </Card.Footer>
             </Card> 
         </div>
     );	
