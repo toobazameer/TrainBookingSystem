@@ -17,21 +17,22 @@ export default class AddTrains extends Component {
     }
     
     initialState = {
-        tid:'', tname:'', source:'', destination:'', duration:'', fare:''
+        id:'', tid:'', tname:'', source:'', destination:'', duration:'', fare:''
     };
 
     componentDidMount() {
-        const tid = this.props.match.params.tid;
-        if(tid) {
-            this.findTrainById(tid);
+        const trainid = this.props.match.params.tid;
+        if(trainid) {
+            this.findTrainById(trainid);
         }
     }   
 
-    findTrainById = (tid) => {
-        axios.get("http://localhost:8080/api/trains/"+tid)
+    findTrainById = (trainid) => {
+        axios.get("http://localhost:8080/api/trains/"+trainid)
             .then(response => {
                 if(response.data != null) {
                     this.setState({
+                        id: response.data.tid,
                         tid: response.data.tid,
                         tname: response.data.tname,
                         source: response.data.source,
@@ -62,7 +63,7 @@ export default class AddTrains extends Component {
             fare: this.state.fare
         };
 
-        axios.post("http://localhost:8080/api/trains/", train)
+        axios.post("http://localhost:8080/api/trains", train)
             .then(response => {
                 if(response.data != null) {
                     this.setState({"show":true, "method":"post"});
@@ -79,6 +80,7 @@ export default class AddTrains extends Component {
         event.preventDefault();
 
         const train = {
+            id: this.state.tid,
             tid: this.state.tid,
             tname: this.state.tname,
             source: this.state.source,
@@ -87,7 +89,7 @@ export default class AddTrains extends Component {
             fare: this.state.fare
         };
 
-        axios.put("http://localhost:8080/api/trains/", train)
+        axios.put("http://localhost:8080/api/trains", train)
             .then(response => {
                 if(response.data != null) {
                     this.setState({"show":true, "method":"put"});
@@ -121,16 +123,16 @@ export default class AddTrains extends Component {
             </div>
 		<Card className={"border border-dark bg-dark text-white"}>
                 <Card.Header>
-                    <FontAwesomeIcon icon={this.state.tid ? faEdit : faPlusSquare} /> {this.state.tid ? "Update Train" : "Add New Train"}
+                    <FontAwesomeIcon icon={this.state.id ? faEdit : faPlusSquare} /> {this.state.id ? "Update Train" : "Add New Train"}
                 </Card.Header>
-                <Form onReset={this.resetTrain} onSubmit={this.state.tid ? this.updateTrain : this.submitTrain} id="trainFormId">
+                <Form onReset={this.resetTrain} onSubmit={this.state.id ? this.updateTrain : this.submitTrain} id="trainFormId">
                         <Card.Body>
                         <Form.Row>
                             <Form.Group as={Col} controlId="formGridTid">
                                 <Form.Label>Tid</Form.Label>
                                 <Form.Control required
                                     type="test" name="tid"
-                                    value={this.state.tid}
+                                    value={tid}
                                     onChange={this.trainChange}
                                     className={"bg-dark text-white"}
                                     placeholder="Enter Train Id" />
@@ -139,7 +141,7 @@ export default class AddTrains extends Component {
                                 <Form.Label>Tname</Form.Label>
                                 <Form.Control required
                                     type="test" name="tname"
-                                    value={this.state.tname}
+                                    value={tname}
                                     onChange={this.trainChange}
                                     className={"bg-dark text-white"}
                                     placeholder="Enter Train Name" />
@@ -150,7 +152,7 @@ export default class AddTrains extends Component {
                                 <Form.Label>Source</Form.Label>
                                 <Form.Control required
                                     type="test" name="source"
-                                    value={this.state.source}
+                                    value={source}
                                     onChange={this.trainChange}
                                     className={"bg-dark text-white"}
                                     placeholder="Enter Train Source" />
@@ -159,7 +161,7 @@ export default class AddTrains extends Component {
                                 <Form.Label>Destination</Form.Label>
                                 <Form.Control required
                                     type="test" name="destination"
-                                    value={this.state.destination}
+                                    value={destination}
                                     onChange={this.trainChange}
                                     className={"bg-dark text-white"}
                                     placeholder="Enter Train Destination" />
@@ -170,7 +172,7 @@ export default class AddTrains extends Component {
                                 <Form.Label>Duration</Form.Label>
                                 <Form.Control required
                                     type="test" name="duration"
-                                    value={this.state.duration}
+                                    value={duration}
                                     onChange={this.trainChange}
                                     className={"bg-dark text-white"}
                                     placeholder="Enter Train Duration" />
@@ -179,7 +181,7 @@ export default class AddTrains extends Component {
                                 <Form.Label>Fare</Form.Label>
                                 <Form.Control required
                                     type="test" name="fare"
-                                    value={this.state.fare}
+                                    value={fare}
                                     onChange={this.trainChange}
                                     className={"bg-dark text-white"}
                                     placeholder="Enter Train Fare" />
@@ -188,7 +190,7 @@ export default class AddTrains extends Component {
                     </Card.Body>
                     <Card.Footer style={{"textAlign":"right"}}>
                         <Button size="sm" variant="success" type="submit">
-                            <FontAwesomeIcon icon={faSave} /> {this.state.tid ? "Update" : "Save"}
+                            <FontAwesomeIcon icon={faSave} /> {this.state.id ? "Update" : "Save"}
                         </Button>{' '}
                        <Button size="sm" variant="info" type="reset">
                             <FontAwesomeIcon icon={faUndo} /> Reset

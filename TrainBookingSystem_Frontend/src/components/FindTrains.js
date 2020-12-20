@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import {Card, Table, ButtonGroup, Button} from 'react-bootstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faList, faEdit, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {faList, faEdit, faTrash, faAddressCard, faPlus} from '@fortawesome/free-solid-svg-icons';
 import {Link} from 'react-router-dom';
 import MyToast from './MyToast';
 import axios from 'axios';
@@ -21,7 +21,7 @@ export default class FindTrains extends Component {
     }
 
     findAllTrains() {
-        axios.get("http://localhost:8080/api/trains/")
+        axios.get("http://localhost:8080/api/trains")
             .then(response => response.data)
             .then((data) => {
                 this.setState({trains: data});
@@ -79,6 +79,8 @@ export default class FindTrains extends Component {
                                     <td>
                                         <ButtonGroup>
                                             <Link to={"edit/"+train.tid} className="btn btn-sm btn-outline-primary"><FontAwesomeIcon icon={faEdit} /></Link>{' '}
+                                            <Link to={"addseats/"+train.tid} className="btn btn-sm btn-outline-primary"><FontAwesomeIcon icon={faPlus} /></Link>{' '}
+                                            <Link to={"findseats/"+train.tid} className="btn btn-sm btn-outline-primary"><FontAwesomeIcon icon={faAddressCard} /></Link>{' '}
                                             <Button size="sm" variant="outline-danger" onClick={this.deleteTrain.bind(this, train.tid)}><FontAwesomeIcon icon={faTrash} /></Button>
                                         </ButtonGroup>
                                     </td>

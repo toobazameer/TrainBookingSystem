@@ -13,6 +13,7 @@ export default class NavigationBar extends Component {
 	<Nav className="mr-auto">
       <Link to={"find"} className="nav-link">Find Trains</Link>
       <Link to={"add"} className="nav-link">Add Trains</Link>
+	  <Link to={"findseats"} className="nav-link">Find Seats</Link>
     </Nav>
 	</Navbar>
 	);
