@@ -24,8 +24,8 @@ public class TrainsServiceimpl implements TrainsService{
 	}
 	
 	@Override
-	public List<Trains> getTrains(String source){
-		return trainsCheckingRepository.findBySource(source);
+	public List<Trains> getTrains(String source, String destination){
+		return trainsCheckingRepository.findBySource(source, destination);
 	}
 	
 	@Override

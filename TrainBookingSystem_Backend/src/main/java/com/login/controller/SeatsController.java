@@ -17,7 +17,7 @@ import com.login.service.SeatsService;
 
 @RestController
 @CrossOrigin(origins="*", allowedHeaders = "*")
-@RequestMapping("booking")
+@RequestMapping("seats")
 public class SeatsController {
 	
 	@Autowired

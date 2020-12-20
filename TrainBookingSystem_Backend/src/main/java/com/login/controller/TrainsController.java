@@ -44,9 +44,9 @@ public class TrainsController {
 	}
 	
 	//Find Trains from particular source
-	@GetMapping(value = "find/{source}")
-	private List<Trains> getTrains(@PathVariable String source) {
-		return trainCheckingService.getTrains(source);
+	@GetMapping(value = "find/{source}/{destination}")
+	private List<Trains> getTrains(@PathVariable String source, @PathVariable String destination) {
+		return trainCheckingService.getTrains(source, destination);
 	}
 
 	//Add train

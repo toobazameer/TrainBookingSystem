@@ -47,7 +47,7 @@ public class SeatsServiceImpl implements SeatsService{
 		if (!trainsOptional.isPresent()) {
 			return null;
 		}
-			return ticketBookingRepository.findAll();
+			return trainsCheckingRepository.findSeatsByTid(tid);
 	}
 
 	/*@Override

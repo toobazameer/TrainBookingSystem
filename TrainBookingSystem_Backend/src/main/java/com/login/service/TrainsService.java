@@ -8,7 +8,7 @@ public interface TrainsService {
 	
 	 List<Trains> getTrains();
 	
-	 List<Trains> getTrains(String source);
+	 List<Trains> getTrains(String source, String destination);
 	
 	 Trains addTrain(Trains train);
 	 
