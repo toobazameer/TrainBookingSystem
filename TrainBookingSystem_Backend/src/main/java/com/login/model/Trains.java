@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -24,6 +25,7 @@ public class Trains {
 	private String destination;
 	private double fare;
 	private Long duration;
+	@Column(name="seats")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "trains")
 	private Set<Seats> seats = new HashSet<Seats>();
 
@@ -32,7 +34,7 @@ public class Trains {
 	}
 
 	public Trains(String tid, String tname, String source, String destination, double fare, Long duration,
-			Set<Seats> seatsInfo) {
+			Set<Seats> seats) {
 		super();
 		this.tid = tid;
 		this.tname = tname;
@@ -40,7 +42,7 @@ public class Trains {
 		this.destination = destination;
 		this.fare = fare;
 		this.duration = duration;
-		this.seats = seatsInfo;
+		this.seats = seats;
 	}
 
 	public String getTid() {
@@ -91,18 +93,18 @@ public class Trains {
 		this.duration = duration;
 	}
 
-	public Set<Seats> getSeatsInfo() {
+	public Set<Seats> getSeats() {
 		return seats;
 	}
 
-	public void setSeatsInfo(Set<Seats> seats) {
+	public void setSeats(Set<Seats> seats) {
 		this.seats = seats;
 	}
 
 	@Override
 	public String toString() {
 		return "Trains [tid=" + tid + ", tname=" + tname + ", source=" + source + ", destination=" + destination
-				+ ", fare=" + fare + ", duration=" + duration + ", seatsInfo=" + seats + "]";
+				+ ", fare=" + fare + ", duration=" + duration + ", seats=" + seats + "]";
 	}
 
 }

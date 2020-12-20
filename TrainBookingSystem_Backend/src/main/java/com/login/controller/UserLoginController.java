@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@CrossOrigin(origins="*",allowedHeaders = "*")
+@CrossOrigin(origins="*", allowedHeaders = "*")
 @RequestMapping("dummy")
 public class UserLoginController {
 	
